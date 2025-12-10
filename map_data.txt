@@ -1,0 +1,16 @@
+# This file defines the weighted edges (roads) for the delivery map.
+# Format: StartLocation EndLocation Distance
+
+# Connections from the Starting Location (A)
+A B 5.0
+A D 8.0
+
+# Connections between other locations
+B C 4.0
+B D 7.0
+C E 6.0
+D E 2.0
+D C 3.0
+
+# Connections back to the starting location (or indirect connections)
+E A 9.0
