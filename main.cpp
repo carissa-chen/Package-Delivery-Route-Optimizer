@@ -9,6 +9,7 @@
 #include "Graph.h"
 #include "Optimizer.h"
 
+//helo!
 // Define the name of your starting location (Depot)
 const char START_LOCATION = 'A'; 
 
