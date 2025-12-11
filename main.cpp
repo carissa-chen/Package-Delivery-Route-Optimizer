@@ -54,15 +54,16 @@ void loadData(Graph& g) {
         std::cerr << "Error: Could not open map_data.txt\n";
     }
 
-    // --- 2. Load PACKAGE Data (Populating Hash Table and Queue) ---
-    std::ifstream pkgFile("package_list.csv");
-    if (pkgFile.is_open()) {
-        std::string pkgID;
-        char destName;
-        
-        while (std::getline(pkgFile, line)) {
-            std::stringstream ss(line);
-            ss >> pkgID >> destName;
+        // --- 2. Load PACKAGE Data (Populating Hash Table and Queue) ---
+        std::ifstream pkgFile("package_list.csv");
+        if (pkgFile.is_open()) {
+            std::string pkgID;
+            char destName;
+            
+            while (std::getline(pkgFile, line)) {
+                std::stringstream ss(line);
+                std::getline(ss, pkgID, ',');  // read until comma
+                ss >> destName;                 // read the destination character
             
             // Skip the starting location if it appears as a destination
             if (destName == START_LOCATION) continue; 
@@ -95,6 +96,16 @@ int main() {
         std::cerr << "Program halted: Graph is empty.\n";
         return 1;
     }
+
+    // check what's in the queue
+    std::cout << "\n--- Debug: Pending Addresses ---\n";
+    std::queue<Address> debugQueue = pendingAddresses;
+    int count = 0;
+    while (!debugQueue.empty()) {
+        std::cout << "Address " << ++count << ": " << debugQueue.front().name << "\n";
+        debugQueue.pop();
+    }
+    std::cout << "Total addresses in queue: " << count << "\n";
 
     // --- 3. Run Optimization Logic ---
     Optimizer routeFinder;
