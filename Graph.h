@@ -1,76 +1,84 @@
-// Graph.h
 #ifndef GRAPH_H
 #define GRAPH_H
-
 #include <vector>
+#include <list>
 #include <string>
 #include <unordered_map>
 #include <iostream>
 #include "Address.h"
 
-struct Edge {
-    int destinationIndex; // Index of the connected location in the allLocations vector
-    double weight;        // Distance or time
+struct Edge 
+{
+    int destinationIndex; //index of the connected location
+    double weight;        //distance between nodes
 };
 
-class Graph {
+class Graph 
+{
 private:
-    std::vector<Address> allLocations; // Stores all nodes/locations
-    std::vector<std::vector<Edge>> adjacencyList; // The required **LIST** structure
+    std::vector<Address> allLocations; //stores all the locations (nodes)
+    std::vector<std::list<Edge>> adjacencyList; //list
     
-    // Internal Hash Table to map character name to index for O(1) lookup
+    //internal hash table to map character name to index for O(1) search
     std::unordered_map<char, int> locationIndexMap; 
 
 public:
     Graph() {}
 
-    // Adds a new location (node) to the graph
-    void addLocation(char name) {
-        if (locationIndexMap.count(name) == 0) {
+    //adds a new location (node) to the graph
+    void addLocation(char name) 
+    {
+        if (locationIndexMap.count(name) == 0) 
+        {
             Address newAddr = {name};
             int index = allLocations.size();
             allLocations.push_back(newAddr);
             locationIndexMap[name] = index;
-            adjacencyList.push_back({}); // Initialize an empty adjacency list for the new node
+            adjacencyList.push_back({}); //initialize an empty list for the new node
         }
     }
 
-    // Adds a weighted, undirected edge between two locations
-    void addEdge(char nameA, char nameB, double weight) {
-        if (locationIndexMap.count(nameA) && locationIndexMap.count(nameB)) {
+    //adds a weighted and undirected edge between two locations
+    void addEdge(char nameA, char nameB, double weight) 
+    {
+        if (locationIndexMap.count(nameA) && locationIndexMap.count(nameB)) 
+        {
             int indexA = locationIndexMap.at(nameA);
             int indexB = locationIndexMap.at(nameB);
             
-            // Add B to A's adjacency list
+            //add B to A's adjacency list
             adjacencyList[indexA].push_back({indexB, weight});
-            
-            // Add A to B's adjacency list (undirected graph)
+            //add A to B's adjacency list (undirected graph)
             adjacencyList[indexB].push_back({indexA, weight});
         }
     }
 
-    // Helper to get the location index from its character name
-    int getLocationIndex(char name) const {
-        if (locationIndexMap.count(name)) {
+    //helper to get the location index from its character name
+    int getLocationIndex(char name) const 
+    {
+        if (locationIndexMap.count(name)) 
+        {
             return locationIndexMap.at(name);
         }
-        return -1; // Not found
+        return -1;
     }
 
-    // Helper to get the Address object from its index
-    Address getAddress(int index) const {
-        if (index >= 0 && index < allLocations.size()) {
+    //help to get the address object from its index
+    Address getAddress(int index) const 
+    {
+        if (index >= 0 && index < allLocations.size()) 
+        {
             return allLocations[index];
         }
-        return {' '}; // Return empty address if out of bounds
+        return {' '};
     }
 
-    // Helper to get the adjacency list for a given index
-    const std::vector<Edge>& getEdges(int index) const {
+    //helper to get the adjacency list for a given index
+    const std::list<Edge>& getEdges(int index) const 
+    {
         return adjacencyList[index];
     }
-    
     size_t size() const { return allLocations.size(); }
 };
 
-#endif // GRAPH_H
+#endif
